@@ -23,7 +23,7 @@ Profile > **Add profile section** > Recommended > **Add projects**.
 - **Description** (paste this):
 
 ```
-A student project: relive real stock market crashes (1987, 2000, 2008, 2020, 2022) one trading day at a time with $10,000 and real prices.
+A student project: relive real stock market crashes (1973, 1987, 2000, 2008, 2011, 2020, 2022) one trading day at a time with $10,000 and real prices.
 
 Under the game is a backtesting engine:
 • No look-ahead: a decision at the close earns the next day's return.
@@ -32,7 +32,7 @@ Under the game is a backtesting engine:
 
 You race buy-and-hold and a trend + volatility-targeting strategy of the kind funds use. At the end, a permutation test against 2,000 random traders making the same number of trades tells you whether your timing was skill or luck.
 
-There's a Daily Challenge with a secret crash and a shareable score. Tested in CI against real historic days (Black Monday −20.47%).
+After each game you get a move-by-move review of what every trade made or cost you, plus a link that challenges a friend to beat your score on the same crash. New secret crash every day. Tested in CI against real historic days (Black Monday −20.47%).
 
 JavaScript · Canvas · Python · Statistics
 ```

@@ -31,6 +31,10 @@ test("historic days match the record", () => {
   assert.ok(Math.abs(dd - 0.568) < 0.002, `2008 drawdown ${dd}`);
   const dot = CR.indexDrawdown(ndq, CR.indexOf(ndq, "1999-10-01"), CR.indexOf(ndq, "2002-12-31")).dd;
   assert.ok(dot > 0.77 && dot < 0.79, `dot-com drawdown ${dot}`);
+  const oil = CR.indexDrawdown(spx, CR.indexOf(spx, "1972-10-02"), CR.indexOf(spx, "1975-06-30")).dd;
+  assert.ok(Math.abs(oil - 0.482) < 0.002, `1973-74 drawdown ${oil}`);
+  const dg = close(spx, "2011-08-08") / close(spx, "2011-08-05") - 1;
+  assert.ok(Math.abs(dg - -0.0666) < 0.0005, `2011-08-08 ${dg}`);
 });
 
 test("buy and hold compounds the market return exactly", () => {

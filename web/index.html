@@ -134,8 +134,8 @@ section.block { padding-block: 40px; }
 .block-head p { color: var(--muted); max-width: 40em; margin-top: 6px; }
 
 /* scenario cards */
-.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-@media (max-width: 920px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 .card { cursor: pointer; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 12px; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; min-width: 0; }
 .card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
@@ -251,6 +251,37 @@ td:first-child { font-family: var(--font); color: var(--muted); }
 .reveal { background: var(--accent-soft); border-radius: 14px; padding: 16px 18px; font-weight: 600; }
 .copybox { width: 100%; font: 13px/1.5 var(--mono); border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); border-radius: 10px; padding: 10px; resize: none; }
 
+/* v2: keys hint, move review, trophies, friend challenge */
+.keys { font: 500 12px/1.4 var(--mono); color: var(--muted); display: flex; gap: 6px 10px; flex-wrap: wrap; align-items: center; }
+.keys > span { white-space: nowrap; }
+@media (max-width: 920px), (hover: none) { .keys { display: none; } }
+.vs { background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; }
+.moves { margin-top: 20px; }
+.moves-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.moves-head h2 { font-size: 22px; font-weight: 700; }
+.moves-head p { color: var(--muted); font-size: 14px; }
+.move-list { display: grid; gap: 8px; }
+.move { display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 16px; }
+.move.best { border-color: var(--up); box-shadow: 0 0 0 1px var(--up) inset; }
+.move.worst { border-color: var(--down); }
+.move time { font: 500 13px/1.3 var(--mono); color: var(--muted); }
+.move .what { font-weight: 600; min-width: 0; }
+.move .what small { display: block; font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.move .eff { font: 600 15px/1.2 var(--mono); text-align: right; white-space: nowrap; }
+.move .eff small { display: block; font: 500 11px/1.3 var(--mono); color: var(--muted); }
+.move .flag { white-space: nowrap; display: inline-block; font: 600 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 4px 6px; border-radius: 5px; margin-left: 8px; vertical-align: 2px; }
+.move.best .flag { background: color-mix(in srgb, var(--up) 15%, transparent); color: var(--up); }
+.move.worst .flag { background: var(--down-soft); color: var(--down); }
+@media (max-width: 560px) { .move { grid-template-columns: minmax(0, 1fr) auto; } .move time { grid-column: 1 / -1; } }
+.badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 14px; font-weight: 600; }
+.badge i { font-style: normal; font-size: 16px; line-height: 1; }
+.badge.off { opacity: .4; filter: grayscale(1); font-weight: 500; }
+.badge.new { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.badge.new::after { content: "NEW"; font: 700 10px/1 var(--mono); letter-spacing: .08em; color: var(--accent); }
+.trophies { margin-top: 24px; display: grid; gap: 10px; }
+.trophies .eyebrow { display: flex; gap: 10px; }
+
 @media (max-width: 600px) { #chart { height: 300px; } .news { align-items: flex-end; top: auto; bottom: 44px; } .news div { font-size: 14px; } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -311,6 +342,7 @@ td:first-child { font-family: var(--font); color: var(--muted); }
   <section class="block wrap" id="crashes">
     <div class="block-head"><h2>Or pick a crash</h2></div>
     <div class="grid" id="cards"></div>
+    <div class="trophies" id="trophies"></div>
   </section>
 
   <section class="block wrap" id="how">
@@ -349,6 +381,9 @@ td:first-child { font-family: var(--font); color: var(--muted); }
       <h2 id="gName">2008 Financial Crisis</h2>
     </div>
     <div class="controls">
+      <div class="speed" role="group" aria-label="Speed">
+        <button data-speed="1" aria-pressed="false">1×</button><button data-speed="2" aria-pressed="true">2×</button><button data-speed="4" aria-pressed="false">4×</button>
+      </div>
       <button class="icon-btn" id="playBtn" aria-label="Pause"></button>
       <button class="btn btn-ghost" id="quitBtn" style="padding:10px 16px">Quit</button>
     </div>
@@ -366,6 +401,7 @@ td:first-child { font-family: var(--font); color: var(--muted); }
       <div class="news" aria-live="polite"><div id="news"><small id="newsDate"></small><span id="newsText"></span></div></div>
       <div class="start-overlay" id="startOverlay">
         <div>
+          <span class="vs" id="soVs" hidden></span>
           <h2 style="font-size:26px" id="soTitle">You have $10,000 in the market.</h2>
           <p id="soText">Days will start ticking by. Tap Sell, Half or All in at any time.</p>
           <button class="btn btn-primary btn-lg" id="beginBtn">Start</button>
@@ -385,6 +421,7 @@ td:first-child { font-family: var(--font); color: var(--muted); }
           <button data-e="0.5" aria-pressed="false">Half</button>
           <button data-e="1" aria-pressed="true">All in</button>
         </div>
+        <p class="keys"><span><span class="kbd">1</span> sell</span> <span><span class="kbd">2</span> half</span> <span><span class="kbd">3</span> all in</span> <span><span class="kbd">space</span> pause</span></p>
       </div>
       <div class="panel">
         <p class="eyebrow">Who's winning</p>
@@ -400,6 +437,7 @@ td:first-child { font-family: var(--font); color: var(--muted); }
     <h1 id="rTitle">You beat the market.</h1>
     <p id="rSub"></p>
     <div class="reveal" id="rReveal" hidden></div>
+    <div class="badges" id="rBadges"></div>
   </div>
   <div class="tiles" id="rTiles"></div>
   <div class="res-grid">
@@ -421,6 +459,7 @@ td:first-child { font-family: var(--font); color: var(--muted); }
       </div>
     </div>
   </div>
+  <section class="moves" id="rMoves"></section>
   <details class="math" id="rDetails">
     <summary>See full stats</summary>
     <div class="res-grid" style="margin-top:16px">
@@ -455,7 +494,7 @@ td:first-child { font-family: var(--font); color: var(--muted); }
 (() => {
 "use strict";
 const $ = (id) => document.getElementById(id);
-const SHARE_URL = "https://claude.ai/artifact/A8HZGHWtTNp1V6zXCYPqxK";
+const SHARE_URL = "https://parveenkumar.site/crash-replay";
 
 // ---------------------------------------------------------------- scenarios
 const SCENARIOS = [
@@ -519,6 +558,27 @@ const SCENARIOS = [
       ["2022-11-10", "Inflation cools. The Nasdaq jumps 7.4%."],
       ["2023-03-10", "Silicon Valley Bank collapses."],
     ] },
+  { id: "1973", name: "Oil Shock", ix: "spx", from: "1972-10-02", to: "1975-06-30", tag: "Grinding",
+    blurb: "An oil embargo, Watergate and a 48% slide.",
+    news: [
+      ["1973-01-11", "The S&P 500 closes at a record 120."],
+      ["1973-10-17", "Arab oil producers cut output and target the US. The oil crisis begins."],
+      ["1974-03-18", "Oil producers lift the embargo on the US."],
+      ["1974-08-08", "President Nixon announces his resignation."],
+      ["1974-10-03", "The S&P 500 closes at 62, down 48% from its peak."],
+    ] },
+  { id: "2011", name: "Debt-Ceiling Scare", ix: "spx", from: "2011-04-01", to: "2012-02-29", tag: "Short and sharp",
+    blurb: "The US loses its AAA credit rating.",
+    news: [
+      ["2011-04-29", "The S&P 500 closes at 1,364, its high for the year."],
+      ["2011-08-02", "The debt-ceiling deal is signed hours before the deadline."],
+      ["2011-08-04", "Fears over Europe's debt crisis. The S&P 500 falls 4.8%."],
+      ["2011-08-05", "After the close, S&P cuts the US credit rating below AAA."],
+      ["2011-08-08", "First day after the downgrade. The S&P 500 falls 6.7%."],
+      ["2011-08-09", "The Fed signals near-zero rates until mid-2013. Stocks jump 4.7%."],
+      ["2011-10-03", "The S&P 500 closes at 1,099, down 19% from its peak."],
+      ["2011-10-27", "Europe agrees a rescue plan for Greece. The S&P 500 jumps 3.4%."],
+    ] },
 ];
 
 const S = { spx: CR.decode(CR_DATA.spx), ndq: CR.decode(CR_DATA.ndq) };
@@ -553,7 +613,7 @@ function movesEmoji(exp) {
 function dailyShareText(r) {
   return `Crash Replay Daily #${r.n} 📉\nMe ${pct(r.ret)} · Market ${pct(r.hold)}\n${r.moves}` +
     (r.trades ? `\nBeat ${Math.round(r.pct * 100)}% of random traders` : "") + (r.streak > 1 ? ` · 🔥${r.streak}` : "") +
-    (SHARE_URL ? "\n" + SHARE_URL : "");
+    (SHARE_URL ? "\n" + SHARE_URL + "#daily/vs/" + (r.ret * 100).toFixed(1) : "");
 }
 function renderDaily() {
   const n = dayNumber(Date.now()), r = store.get("daily:" + todayKey());
@@ -720,6 +780,7 @@ function sparkline(c, s, i0, i1) {
 
 function renderCards() {
   renderDaily();
+  renderTrophies();
   const host = $("cards");
   host.innerHTML = "";
   for (const sc of SCENARIOS) {
@@ -781,6 +842,8 @@ function tapeLoop(ts) {
 
 // ---------------------------------------------------------------- game
 const G = {};
+let PENDING_VS = null;
+window.__crashReplay = G; // read-only handle for automated tests
 function show(view) {
   for (const v of ["home", "game", "results"]) $(v).hidden = v !== view;
   window.scrollTo({ top: 0 });
@@ -824,6 +887,10 @@ function startGame(id) {
   $("soText").textContent = mystery
     ? "Somewhere in this year the market falls at least 15%. Dates are hidden. Tap Sell, Half or All in at any time."
     : "Days will start ticking by, with real headlines. Tap Sell, Half or All in at any time.";
+  G.vs = PENDING_VS && PENDING_VS.id === sc.id ? PENDING_VS.ret : null;
+  PENDING_VS = null;
+  $("soVs").hidden = G.vs == null;
+  if (G.vs != null) $("soVs").textContent = `A friend made ${pct(G.vs)} on this crash. Beat it.`;
   $("startOverlay").hidden = false;
   $("news").classList.remove("show");
   setPosition(1, true);
@@ -867,6 +934,11 @@ function advance() {
 }
 
 const SPEED = { base: 7, mult: 2 };
+function setSpeed(v) {
+  SPEED.mult = [1, 2, 4].includes(v) ? v : 2;
+  for (const b of document.querySelectorAll("[data-speed]")) b.setAttribute("aria-pressed", String(Number(b.dataset.speed) === SPEED.mult));
+  store.set("speed", SPEED.mult);
+}
 function loop(ts) {
   const dt = G.lastTs ? Math.min(ts - G.lastTs, 100) : 0;
   G.lastTs = ts;
@@ -960,7 +1032,8 @@ function finish() {
   $("rTitle").textContent = title;
   const label = G.sc.id === "mystery" ? "Mystery Crash" : G.sc.name;
   $("rEyebrow").textContent = label + (isBest && best ? " · New personal best" : "");
-  $("rSub").textContent = `$10,000 became ${money(you.final)}.` + (p.trades
+  const vsLine = G.vs == null ? "" : you.ret > G.vs ? `You beat your friend's ${pct(G.vs)}. ` : `Your friend's ${pct(G.vs)} still stands. `;
+  $("rSub").textContent = vsLine + `$10,000 became ${money(you.final)}.` + (p.trades
     ? ` Your timing beat ${Math.round(skill.pct * 100)}% of random traders.`
     : " You never traded. Try selling before the drop next time.");
   $("rTiles").innerHTML = [["You", "--accent", you, true], ["The market", "--hold", hold], ["The quant", "--quant", quant]]
@@ -1003,11 +1076,97 @@ function finish() {
   } else G.dailyResult = null;
   if (G.dailyResult) $("brag").value = dailyShareText(G.dailyResult);
   else $("brag").value = `I played ${tag} on Crash Replay with real market data: $10,000 → ${money(you.final)} (${pct(you.ret)}). Buy and hold: ${pct(hold.ret)}.` +
-    (p.trades ? ` I beat ${Math.round(skill.pct * 100)}% of random traders.` : "") + ` Can you beat me?` + (SHARE_URL ? " " + SHARE_URL : "");
+    (p.trades ? ` I beat ${Math.round(skill.pct * 100)}% of random traders.` : "") + ` Can you beat me?` +
+    (SHARE_URL ? " " + SHARE_URL + (G.mystery ? "" : "#" + G.sc.id + "/vs/" + (you.ret * 100).toFixed(1)) : "");
+  renderBadges(awardBadges());
+  renderMoves();
   $("againBtn").textContent = G.sc.id === "daily" ? "Play a random crash" : "Play again";
   $("rDetails").open = false;
   show("results");
   requestAnimationFrame(drawResults);
+}
+
+// What each trade did: the value it made or saved compared with keeping the
+// previous position until the next trade (or the end).
+function moveEffects() {
+  const { ret, marks, s, i0, m } = G, path = G.player.path, out = [];
+  marks.forEach((mk, j) => {
+    const end = j + 1 < marks.length ? marks[j + 1].k : m;
+    let keep = path[mk.k], did = path[mk.k] * (1 - CR.COST * Math.abs(mk.e - mk.prev));
+    for (let k = mk.k; k < end; k++) {
+      keep *= 1 + mk.prev * ret.mkt[k] + (1 - mk.prev) * ret.cash[k];
+      did *= 1 + mk.e * ret.mkt[k] + (1 - mk.e) * ret.cash[k];
+    }
+    out.push({ ...mk, end, effect: did - keep, mkt: s.close[i0 + end] / s.close[i0 + mk.k] - 1 });
+  });
+  return out;
+}
+const ACTION = (e) => (e === 0 ? "Sold everything" : e === 1 ? "Went all in" : "Went half in");
+function renderMoves() {
+  const host = $("rMoves"), mv = moveEffects();
+  if (!mv.length) {
+    host.innerHTML = `<div class="moves-head"><h2>Your moves</h2><p>You held all the way. Next time, try a sell before the drop.</p></div>`;
+    return;
+  }
+  const best = mv.reduce((a, b) => (b.effect > a.effect ? b : a)), worst = mv.reduce((a, b) => (b.effect < a.effect ? b : a));
+  let shown = mv;
+  if (mv.length > 8) {
+    const keep = new Set([...mv].sort((a, b) => Math.abs(b.effect) - Math.abs(a.effect)).slice(0, 8));
+    shown = mv.filter((x) => keep.has(x));
+  }
+  const total = mv.reduce((a, b) => a + b.effect, 0);
+  host.innerHTML = `<div class="moves-head"><h2>Your moves</h2><p>${mv.length} trade${mv.length === 1 ? "" : "s"} · ${total >= 0 ? "together they made" : "together they cost"} you ${money(Math.abs(total))}${shown.length < mv.length ? ` · showing the ${shown.length} biggest` : ""}</p></div>
+    <div class="move-list">${shown.map((x) => {
+      const cls = mv.length > 1 && x === best && x.effect > 0 ? "best" : mv.length > 1 && x === worst && x.effect < 0 ? "worst" : "";
+      const flag = cls === "best" ? "Best move" : cls === "worst" ? "Worst move" : "";
+      const level = G.mystery ? "" : ` at ${fmtLevel(G.s.close[G.i0 + x.k])}`;
+      const until = x.end >= G.m ? "to the end" : "until your next trade";
+      return `<div class="move ${cls}"><time>${fmtDate(G.s.t[G.i0 + x.k])}</time>
+        <div class="what">${ACTION(x.e)}${level}${flag ? `<span class="flag">${flag}</span>` : ""}<small>The market went ${pct(x.mkt)} ${until}.</small></div>
+        <div class="eff ${sign(x.effect)}">${x.effect >= 0 ? "+" : "−"}${money(Math.abs(x.effect))}<small>vs not trading</small></div></div>`;
+    }).join("")}</div>`;
+}
+
+// Trophies, kept in this browser.
+const BADGES = [
+  { id: "top", icon: "🎯", name: "Sold near the top" },
+  { id: "bottom", icon: "🪂", name: "Bought near the bottom" },
+  { id: "market", icon: "📈", name: "Beat the market" },
+  { id: "quant", icon: "🤖", name: "Beat the quant" },
+  { id: "skill", icon: "🧠", name: "Skill, not luck" },
+  { id: "all", icon: "🏆", name: "Played every crash" },
+];
+function awardBadges() {
+  const { s, i0, m } = G, cl = (k) => s.close[i0 + k];
+  let lo = Infinity; for (let k = 0; k <= m; k++) lo = Math.min(lo, cl(k));
+  const got = new Set();
+  let peak = 0, pk = 0;
+  for (const mk of G.marks) {
+    while (pk <= mk.k) peak = Math.max(peak, cl(pk++));
+    let after = Infinity; for (let k = mk.k; k <= m; k++) after = Math.min(after, cl(k));
+    if (mk.e < mk.prev && cl(mk.k) >= peak * 0.95 && after <= cl(mk.k) * 0.85) got.add("top");
+    if (mk.e > mk.prev && cl(mk.k) <= lo * 1.10) got.add("bottom");
+  }
+  if (G.you.final > G.holdS.final) got.add("market");
+  if (G.you.final > G.quantS.final) got.add("quant");
+  if (G.player.trades && G.skill.pct >= 0.95) got.add("skill");
+  const played = new Set(store.get("played") || []);
+  played.add(G.sc.id === "daily" ? "mystery" : G.sc.id);
+  store.set("played", [...played]);
+  if (SCENARIOS.every((x) => played.has(x.id)) && played.has("mystery")) got.add("all");
+  const had = new Set(store.get("badges") || []);
+  const fresh = [...got].filter((b) => !had.has(b));
+  store.set("badges", [...new Set([...had, ...got])]);
+  return { got, fresh: new Set(fresh) };
+}
+function renderBadges({ got, fresh }) {
+  $("rBadges").innerHTML = BADGES.filter((b) => got.has(b.id))
+    .map((b) => `<span class="badge${fresh.has(b.id) ? " new" : ""}"><i>${b.icon}</i>${b.name}</span>`).join("");
+}
+function renderTrophies() {
+  const had = new Set(store.get("badges") || []);
+  $("trophies").innerHTML = `<p class="eyebrow">Your trophies <span>${had.size} of ${BADGES.length}</span></p>
+    <div class="badges">${BADGES.map((b) => `<span class="badge${had.has(b.id) ? "" : " off"}"><i>${b.icon}</i>${b.name}</span>`).join("")}</div>`;
 }
 
 function drawResults() {
@@ -1126,8 +1285,7 @@ document.addEventListener("click", (e) => {
   }
   const sp = e.target.closest("[data-speed]");
   if (sp) {
-    SPEED.mult = Number(sp.dataset.speed);
-    for (const b of document.querySelectorAll("[data-speed]")) b.setAttribute("aria-pressed", String(b === sp));
+    setSpeed(Number(sp.dataset.speed));
   }
 });
 $("beginBtn").onclick = () => { setPlaying(true); $("beginBtn").blur(); };
@@ -1173,8 +1331,18 @@ renderCards();
 setInterval(() => { if (!$("home").hidden) renderDaily(); }, 30000);
 initTape();
 requestAnimationFrame(loop);
-const deep = (location.hash || "").slice(1);
-if (deep && (deep === "mystery" || deep === "daily" || SCENARIOS.some((x) => x.id === deep))) startGame(deep);
+setSpeed(store.get("speed") || 2);
+// Deep links: #2008 starts a crash, #2008/vs/12.5 starts it as a friend's challenge.
+function openFromHash() {
+  const [deep, vsKey, vsVal] = decodeURIComponent((location.hash || "").slice(1)).split("/");
+  if (!deep || !(deep === "mystery" || deep === "daily" || SCENARIOS.some((x) => x.id === deep))) return;
+  const v = parseFloat(vsVal);
+  if (vsKey === "vs" && isFinite(v) && Math.abs(v) < 10000) PENDING_VS = { id: deep, ret: v / 100 };
+  if (G.playing) setPlaying(false);
+  startGame(deep);
+}
+window.addEventListener("hashchange", openFromHash);
+openFromHash();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => window.dispatchEvent(new Event("resize")));
 })();
 </script>

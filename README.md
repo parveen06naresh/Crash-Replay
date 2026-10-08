@@ -15,7 +15,11 @@ Relive the biggest stock market crashes one trading day at a time with $10,000 a
 | Dot-com Bust | Nasdaq Composite | Oct 1999 – Dec 2002 | −78% |
 | COVID Crash | S&P 500 | Dec 2019 – Dec 2020 | −34% |
 | Rate Shock | Nasdaq Composite | Sep 2021 – Jun 2023 | −36% |
+| Oil Shock | S&P 500 | Oct 1972 – Jun 1975 | −48% |
+| Debt-Ceiling Scare | S&P 500 | Apr 2011 – Feb 2012 | −19% |
 | Mystery Crash | S&P 500 | random 252-day window since 1955 with a 15%+ fall, dates hidden | varies |
+
+**After every game:** a move-by-move review (what each trade made or cost you against not trading, with your best and worst move), trophies, and a challenge link (`#2008/vs/21.5`) that drops a friend into the same crash with your score to beat.
 
 **Daily Challenge:** everyone gets the same secret crash each day (UTC), one shot, with a spoiler-free emoji grid to share and a streak counter.
 
