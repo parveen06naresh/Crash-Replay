@@ -30,6 +30,10 @@ Relive the biggest stock market crashes one trading day at a time with $10,000 a
 - **The quant.** A classic trend-following rule set: invested only while the index is above its 200-day average, sized to target 15% annualised volatility using 20-day realised volatility. Rebalances when the size moves 10 points or more.
 - **The skill test.** 2,000 random traders make exactly as many trades as the player, on random days, to random positions. The share the player beats is a permutation-test score; beating 95% means the timing was unlikely to be luck (p < 0.05).
 
+## Paper
+
+[Crash Replay: Telling Skill from Luck in Market-Crash Decisions with a Permutation Test](paper/crash-replay.pdf). It checks the skill test for calibration (5.0% false positives at the 95th percentile) and power, and runs three common investor rules through it. Reproduce every number with `node paper/experiments.mjs && node paper/build.mjs`.
+
 ## Layout
 
 ```
@@ -39,6 +43,7 @@ scripts/bundle.py       inlines everything into dist/crash-replay.html (one self
 web/engine.js           portfolio accounting, quant strategy, skill test (no DOM, testable in Node)
 web/index.html          the app (vanilla JS + canvas, no frameworks)
 tests/engine.test.mjs   engine tests: real historic days, costs, no look-ahead, quant, skill test
+paper/                  5-page paper (crash-replay.pdf) plus the scripts that regenerate every number in it
 ```
 
 Rebuild: `python scripts/fetch_data.py && python scripts/build_data.py && python scripts/bundle.py`.
